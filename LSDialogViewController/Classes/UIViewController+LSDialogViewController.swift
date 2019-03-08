@@ -42,7 +42,8 @@ public extension UIViewController {
         
         // dialog View
         let dialogView: UIView = ls_dialogViewController!.view
-        dialogView.autoresizingMask = [.flexibleBottomMargin, .flexibleLeftMargin, .flexibleTopMargin, .flexibleRightMargin]
+        dialogView.translatesAutoresizingMaskIntoConstraints = false
+        // dialogView.autoresizingMask = [.flexibleBottomMargin, .flexibleLeftMargin, .flexibleTopMargin, .flexibleRightMargin]
         dialogView.alpha = 0.0
         dialogView.tag = LSDialogViewTag
         
@@ -78,6 +79,11 @@ public extension UIViewController {
         overlayView.addSubview(dismissButton)
         overlayView.addSubview(dialogView)
         sourceView.addSubview(overlayView)
+        
+        dialogView.widthAnchor.constraint(lessThanOrEqualTo: overlayView.widthAnchor, multiplier: 0.9).isActive = true
+        dialogView.heightAnchor.constraint(lessThanOrEqualTo: overlayView.heightAnchor, multiplier: 0.9).isActive = true
+        dialogView.centerXAnchor.constraint(equalTo: overlayView.centerXAnchor).isActive = true
+        dialogView.centerYAnchor.constraint(equalTo: overlayView.centerYAnchor).isActive = true
         
         // set animation pattern and call
         LSAnimationUtils.shared.startAnimation(self, dialogView: dialogView, sourceView: sourceView, overlayView: overlayView, animationPattern: animationPattern)
