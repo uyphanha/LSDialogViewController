@@ -90,6 +90,7 @@ public extension UIViewController {
         
         // called after the dialog display
         completion?()
+        registerKeyboarNotificationObservers()
    }
     
     // close dialog
@@ -100,6 +101,7 @@ public extension UIViewController {
         
         // set animation pattern and call
         LSAnimationUtils.shared.endAnimation(dialogView, sourceView: sourceView, overlayView: overlayView, animationPattern: animationPattern)
+        unregisgerKeyboardNotificationObservers()
     }
     
     // Close the dialog by tapping the background
@@ -114,5 +116,35 @@ public extension UIViewController {
         sourceViewController = parent
         
         return sourceViewController.view
+    }
+    
+    func registerKeyboarNotificationObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    func unregisgerKeyboardNotificationObservers() {
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc func keyboardWillShow(notification: NSNotification) {
+        guard let userInfo = notification.userInfo else {return}
+        
+        guard let keyboardSize = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue else {return}
+        
+        let keyboardFrame = keyboardSize.cgRectValue
+        
+        let sourceView = self.getSourceView()
+        if let overlayView = sourceView.viewWithTag(LSOverlayViewTag) {
+            overlayView.frame = CGRect(x: 0, y: 0, width: sourceView.frame.width, height: sourceView.frame.height - keyboardFrame.height)
+        }
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        let sourceView = self.getSourceView()
+        if let overlayView = sourceView.viewWithTag(LSOverlayViewTag) {
+            overlayView.frame = CGRect(x: 0, y: 0, width: sourceView.frame.width, height: sourceView.frame.height)
+        }
     }
 }
