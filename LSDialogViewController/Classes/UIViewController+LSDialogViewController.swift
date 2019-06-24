@@ -138,6 +138,9 @@ public extension UIViewController {
         let sourceView = self.getSourceView()
         if let overlayView = sourceView.viewWithTag(LSOverlayViewTag) {
             overlayView.frame = CGRect(x: 0, y: 0, width: sourceView.frame.width, height: sourceView.frame.height - keyboardFrame.height)
+            UIView.animate(withDuration: 0.3, animations: {
+                self.view.layoutIfNeeded()
+            })
         }
     }
     
@@ -145,6 +148,9 @@ public extension UIViewController {
         let sourceView = self.getSourceView()
         if let overlayView = sourceView.viewWithTag(LSOverlayViewTag) {
             overlayView.frame = CGRect(x: 0, y: 0, width: sourceView.frame.width, height: sourceView.frame.height)
+            UIView.animate(withDuration: 0.3, animations: {
+                self.view.layoutIfNeeded()
+            })
         }
     }
 }
