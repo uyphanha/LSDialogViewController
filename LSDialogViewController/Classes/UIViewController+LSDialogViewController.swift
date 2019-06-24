@@ -50,6 +50,7 @@ public extension UIViewController {
         if sourceView.subviews.contains(dialogView) {
             return
         }
+        registerKeyboarNotificationObservers()
         
         let overlayView: UIView = UIView(frame: sourceView.bounds)
         overlayView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -90,7 +91,6 @@ public extension UIViewController {
         
         // called after the dialog display
         completion?()
-        registerKeyboarNotificationObservers()
    }
     
     // close dialog
