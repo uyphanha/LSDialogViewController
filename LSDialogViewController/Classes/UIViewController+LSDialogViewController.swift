@@ -96,12 +96,13 @@ public extension UIViewController {
     // close dialog
     func dismissDialogViewController(_ animationPattern: LSAnimationPattern = .fadeInOut) {
         let sourceView = self.getSourceView()
-        let dialogView = sourceView.viewWithTag(LSDialogViewTag)!
-        let overlayView = sourceView.viewWithTag(LSOverlayViewTag)!
-        
-        // set animation pattern and call
-        LSAnimationUtils.shared.endAnimation(dialogView, sourceView: sourceView, overlayView: overlayView, animationPattern: animationPattern)
-        unregisgerKeyboardNotificationObservers()
+        if let dialogView = sourceView.viewWithTag(LSDialogViewTag) {
+            if let overlayView = sourceView.viewWithTag(LSOverlayViewTag) {
+                // set animation pattern and call
+                LSAnimationUtils.shared.endAnimation(dialogView, sourceView: sourceView, overlayView: overlayView, animationPattern: animationPattern)
+                unregisgerKeyboardNotificationObservers()
+            }
+        }
     }
     
     // Close the dialog by tapping the background
